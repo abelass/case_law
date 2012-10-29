@@ -1,0 +1,31 @@
+<!DOCTYPE webproject>
+<webproject>
+  <project type="Local" name="Case law" encoding="utf8" >
+    <upload/>
+    <author/>
+    <email/>
+    <defaultDTD>-//W3C//DTD HTML 4.01 Transitional//EN</defaultDTD>
+    <item url="flash.session" uploadstatus="1" />
+    <item url="flash.webprj" uploadstatus="1" />
+    <item url="plugin.xml" uploadstatus="1" />
+    <item url="" uploadstatus="1" />
+    <templates>templates/</templates>
+    <toolbars>toolbars/</toolbars>
+    <item url="base/" />
+    <item url="base/installation.php" />
+    <item url="base/tables_interfaces.php" />
+    <item url="base/tables_principales.php" />
+    <item url="templates/" />
+    <item url="toolbars/" />
+    <item url="caselaw.session" />
+    <item url="caselaw.webprj" />
+    <item url="cl_fonctions.php" />
+    <item url="cl_pipeline.php" />
+    <item url="plugin.xml~" />
+    <item url="form_cl.html" />
+    <annotations/>
+    <item url="formulaires/edit_case_law.html" />
+    <item url="formulaires/" />
+    <item url="formulaires/edit_case_law.php" />
+  </project>
+</webproject>

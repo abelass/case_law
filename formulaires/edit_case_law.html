@@ -1,0 +1,90 @@
+
+<div class="cadre cadre-e" style="margin-top: 20px;">
+	<div id="bcbffdde456" class="titrem replie" onmouseover="jQuery(this).depliant('#edit_case_law');"><a class="titremancre" onclick="return jQuery(this).depliant_clicancre('#edit_case_law');" href="#"></a>CASE LAWS</div>
+
+	<div class="cadre_padding">
+
+		<div id="ta3bacb96" class="bloc_depliable blocdeplie">
+		<table cellspacing="0" cellpadding="2" border="0" width="100%">
+			<tbody>
+			<BOUCLE_cls(CL_CASE_LAWS) {id_article}>
+			<tr class="tr_liste">
+				<td class="arial2">
+				<a class="ajax" href="[(#SELF|parametre_url{edit,yes}|parametre_url{id_case_law,#ID_CASE_LAW})]#edit_case_law">#JURIS</a>
+				</td>
+				<td class="arial2">#SIGNS
+				</td>
+				<td class="arial1">#DECNUMBER
+				</td>
+			</tr>
+			</BOUCLE_cls>
+			<tr><td><a class="ajax" href="[(#SELF|parametre_url{edit,yes}|parametre_url{id_case_law,''})]#edit_case_law">New Case Law</a></td>
+			</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+		
+
+
+
+	<div class="formulaire_spip formulaire_edit_case_law bloc_depliable [(#ENV{edit}|=={yes}|?{blocdeplie,[(#ENV{message_erreur}|?{blocdeplie,blocreplie})]})]" id="edit_case_law">
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</p>]
+	<form action="#ENV{action}" method="post"><div>
+    	#ACTION_FORMULAIRE{#ENV{action}}
+
+    	<ul>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{juris}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="juris">Juris</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='juris' id='juris' value="#ENV{juris}" />
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{decdate}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="decdate">Decdate</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='decdate' id='decdate' value="#ENV{decdate}" />
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{signs}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="signs">Signs</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='signs' id='signs' value="#ENV{signs}" />
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{decnumber}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="decnumber">Dec Number</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='decnumber' id='decnumber' value="#ENV{decnumber}" />
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{article}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="article">Article</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<textarea type='text' name='article' id='article' >#ENV{article}</textarea>
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{comments}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="comments">Comments</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<textarea type='text' name='comments' id='comments' >#ENV{comments}</textarea>
+       	 	</li>  
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{dartslink}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="dartslink">Darts Link</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='dartslink' id='dartslink' value="#ENV{dartslink}" />
+       	 	</li>
+       	 #SET{erreurs,#ENV**{erreurs}|table_valeur{color}}
+        	<li class="edit_case_law[ (#GET{erreurs}|oui)erreur]">
+           	 <label for="color">Color</label>
+            	[<span class='erreur_message'>(#GET{erreurs})</span>]
+            	<input type='text' name='color' id='color' value="#ENV{color}" />
+       	 	</li>       	 	       	 	       	 	       	 	       	 	
+    	</ul>
+    	<p class="boutons"><input type="submit" class="submit" value="<:pass_ok:>" />[(#ENV{id_case_law}|oui)<input type="submit" name="delete" class="submit" value="delete" />]</p>
+	</div>
+	</form>
+</div>
