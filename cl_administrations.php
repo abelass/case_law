@@ -11,6 +11,9 @@
 
 if (!defined('_ECRIRE_INC_VERSION')) return;
 
+/**
+ * Migration due to new table structure
+ */
 function update_db(){
    $sql=sql_select('id_case_law,id_article','spip_case_laws');
    while($data=sql_fetch( $sql)){
