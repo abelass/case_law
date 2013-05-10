@@ -1,0 +1,61 @@
+[(#SET{defaut_tri,#ARRAY{
+	multi juris,1,
+	id_case_law,1
+}})
+]
+#SET{selection,#ENV**{selection,#ENV{objet_source}|lister_objets_lies{#ENV{objet},#ENV{id_objet},#ENV{_objet_lien}}}}
+#SET{debut,#ENV{debutcasl,#EVAL{_request("debutcasl");}}}
+<B_liste_case_laws>
+[(#REM) En cas de pagination indirecte @32, il faut refaire le set car la boucle
+a mis a jour la valeur avec la page reelle]
+#SET{debut,#ENV{debutcasl,#EVAL{_request("debutcasl");}}}
+#SET{afficher_lettres,#TRI|=={'multi juris'}|oui}
+#ANCRE_PAGINATION
+<div class="liste-objets liste-objets-lies case_laws">
+<table class='spip liste'>
+[<caption><strong class="caption">(#ENV*{titre,#GRAND_TOTAL|singulier_ou_pluriel{case_law:info_1_case_law,case_law:info_nb_case_laws}})</strong></caption>]
+	<thead>
+		#SET{p,''}
+		<BOUCLE_lettre(CASE_LAWS){tout}{id_case_law IN #GET{selection}}{where?}
+			{tri #ENV{par,multi juris},#GET{defaut_tri}}{id_case_law==#GET{afficher_lettres}|?{'.*','A'}}>[
+		(#JURIS**|extraire_multi|initiale|unique|oui)
+		[(#SET{p,#GET{p}|concat{
+		#SELF|parametre_url{debutcasl,@#ID_CASE_LAW}|ancre_url{paginationcasl}|afficher_initiale{#JURIS**|extraire_multi|initiale{},#COMPTEUR_BOUCLE,#GET{debut},#ENV{nb,10}}
+		}})]
+		]#SAUTER{#ENV{nb,10}|moins{#COMPTEUR_BOUCLE|=={1}|?{2,1}}}</BOUCLE_lettre>[
+		(#SET{p,
+			#GET{p}|concat{
+				#REM|afficher_initiale{#REM,#TOTAL_BOUCLE,#GET{debut},#ENV{nb,10}}
+			}
+		})]</B_lettre>
+		[<tr><td colspan="4"><p class='pagination'>(#GET{p})</p></td></tr>]
+
+		<tr class='first_row'>
+			<th class='juris' scope='col'>[(#TRI{multi juris,<:case_law:label_juris:>,ajax})]</th>
+            <th class='signs' scope='col'>[(#TRI{multi signs,<:case_law:label_signs:>,ajax})]</th>			
+			<th class='action' scope='col'></th>
+		</tr>
+	</thead>
+	<tbody>
+	<BOUCLE_liste_case_laws(CASE_LAWS){id_case_law IN #GET{selection}}
+		{tri #ENV{par,multi juris},#GET{defaut_tri}}{pagination #ENV{nb,10} casl}>
+		<tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})][ (#EXPOSE|unique)][ (#JURIS**|extraire_multi|initiale|=={#ENV{i}}|?{on}|unique)][(#ID_CASE_LAW|=={#ENV{id_lien_ajoute}}|oui)append]">
+			<td class='juris'>[(#LOGO_CASE_LAW|image_reduire{20,20})]<a href="[(#ID_CASE_LAW|generer_url_entite{case_law})]">#JURIS</td>
+			<td class='signs'>#SIGNS</a></td>
+			<td class='action'>
+				[(#ENV{editable}|oui)
+					<button class="button link delete" name="supprimer_lien\[case_law-#ID_CASE_LAW-#OBJET-#ID_OBJET\]" value="X"><:case_law:retirer_lien_case_law:> [(#CHEMIN_IMAGE{supprimer-12.png}|balise_img{'X'})]</button>
+				]
+			</td>
+		</tr>
+	</BOUCLE_liste_case_laws>
+	</tbody>
+</table>
+[<p class='pagination'>(#PAGINATION{prive})</p>]
+[(#GRAND_TOTAL|>{3}|oui)<div class="action"><button class="button link" name="supprimer_lien\[case_law-*-#OBJET-#ID_OBJET\]" value="X"><:case_law:retirer_tous_liens_case_laws:> [(#CHEMIN_IMAGE{supprimer-8.png}|balise_img{'X'})]</button></div>]
+</div>
+</B_liste_case_laws>
+<div class="liste-objets liste-objets-lies CASE_LAWS caption-wrap">
+	<strong class="caption">[(#ENV*{titre,<:case_law:info_aucun_case_law:>})]</strong>
+</div>
+<//B_liste_case_laws>

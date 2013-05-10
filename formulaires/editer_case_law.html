@@ -1,0 +1,43 @@
+<div class='formulaire_spip formulaire_editer formulaire_#FORM formulaire_#FORM-#ENV{id_case_law,nouveau}'>
+	[<p class="reponse_formulaire reponse_formulaire_ok">(#ENV**{message_ok})</p>]
+	[<p class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</p>]
+
+	[(#ENV{editable})
+	<form method='post' action='#ENV{action}'><div>
+		#ACTION_FORMULAIRE{#ENV{action}}
+		<input type='hidden' name='id_case_law' value='#ENV{id_case_law}' />
+		<ul>
+
+			[(#SAISIE{input, juris, obligatoire=oui,
+				label=<:case_law:label_juris:>})]
+
+			[(#SAISIE{date, decdate,
+				label=<:case_law:label_decdate:>,
+				defaut=[(#DATE|affdate{Y-m-d})]
+				})]
+
+			[(#SAISIE{input, signs,
+				label=<:case_law:label_signs:>})]
+
+			[(#SAISIE{input, decnumber,
+				label=<:case_law:label_decnumber:>})]
+
+			[(#SAISIE{textarea, article,
+				label=<:case_law:label_article:>})]
+
+			[(#SAISIE{textarea, comments,
+				label=<:case_law:label_comments:>})]
+
+			[(#SAISIE{input, dartslink,
+				label=<:case_law:label_dartslink:>})]
+
+			[(#SAISIE{input, color,
+				label=<:case_law:label_color:>})]
+
+		</ul>
+		[(#REM) ajouter les saisies supplementaires : extra et autre, a cet endroit ]
+		<!--extra-->
+		<p class="boutons"><input type='submit' class='submit' value='<:bouton_enregistrer:>' /></p>
+	</div></form>
+	]
+</div>

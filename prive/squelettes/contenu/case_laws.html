@@ -1,0 +1,8 @@
+#FORMULAIRE_RECHERCHE_ECRIRE{#SELF,ajax}
+<div class="nettoyeur"></div>
+
+<INCLURE{fond=prive/objets/liste/case_laws, par=signs, env, ajax, sinon=<:case_law:info_aucun_case_law:>}>
+
+[(#AUTORISER{creer,case_law})
+	[(#URL_ECRIRE{case_law_edit,new=oui}|icone_verticale{<:case_law:icone_creer_case_law:>,case_law,new,right})]
+]

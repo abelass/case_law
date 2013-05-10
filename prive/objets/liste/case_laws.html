@@ -1,0 +1,36 @@
+[(#SET{defaut_tri,#ARRAY{
+	juris,1, 
+	id_case_law,1,
+	points,-1
+}})]<B_liste_case_laws>
+#ANCRE_PAGINATION
+<div class="liste-objets case_laws">
+<table class='spip liste'>
+	[<caption><strong class="caption">(#ENV*{titre,#GRAND_TOTAL|singulier_ou_pluriel{case_law:info_1_case_law,case_law:info_nb_case_laws}})</strong></caption>]
+	<thead>
+		<tr class='first_row'>
+			<th class='picto' scope='col'></th>
+			<th class='juris' scope='col'>[(#TRI{juris,<:case_law:label_juris:>,ajax})]</th>
+			<th class='signs' scope='col'>[(#TRI{signs,<:case_law:label_signs:>,ajax})]</th>			
+			<th class='id' scope='col'>[(#TRI{id_case_law,<:info_numero_abbreviation:>,ajax})]</th>
+		</tr>
+	</thead>
+	<tbody>
+	<BOUCLE_liste_case_laws(CASE_LAWS){id_article?}{id_mot?}{id_auteur?}{where?}{recherche?}{tri #ENV{par,num signs},#GET{defaut_tri}}{par juris}{pagination #ENV{nb,10}}>
+		<tr class='[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})]'>
+			<td class='picto'>[(#CHEMIN_IMAGE{case_law-16.png}|balise_img)]</td>
+			<td class='juris principale'>[(#LOGO_CASE_LAW|image_reduire{20,26})]<a href="[(#ID_CASE_LAW|generer_url_entite{case_law})]" title="<:info_numero_abbreviation|attribut_html:> #ID_CASE_LAW">[(#RANG). ]#JURIS</a></td>
+			<td class='signs'>#SIGNS</td>			
+			<td class='id'>[(#AUTORISER{modifier,case_law,#ID_CASE_LAW}|?{
+				<a href="[(#URL_ECRIRE{case_law_edit,id_case_law=#ID_CASE_LAW})]">#ID_CASE_LAW</a>,
+				#ID_CASE_LAW
+			})]</td>
+		</tr>
+	</BOUCLE_liste_case_laws>
+	</tbody>
+</table>
+[<p class='pagination'>(#PAGINATION{prive})</p>]
+</div>
+</B_liste_case_laws>[
+<div class="liste-objets case_laws caption-wrap"><strong class="caption">(#ENV*{sinon,''})</strong></div>
+]<//B_liste_case_laws>

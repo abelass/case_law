@@ -1,0 +1,114 @@
+diff -r -x . -x .. -x fabrique_diff.diff -x fabrique_cl.php ../plugins/fabrique_auto/.backup/cl/base/cl.php ../plugins/fabrique_auto/cl/base/cl.php
+68c68
+< 		'tables_jointures'  => array(),
+---
+> 		'tables_jointures'  => array('spip_case_laws_liens'),
+75a76,102
+>
+> /**
+>  * Déclaration des tables secondaires (liaisons)
+>  *
+>  * @pipeline declarer_tables_auxiliaires
+>  * @param array $tables
+>  *     Description des tables
+>  * @return array
+>  *     Description complétée des tables
+>  */
+> function cl_declarer_tables_auxiliaires($tables) {
+>
+> 	$tables['spip_case_laws_liens'] = array(
+> 		'field' => array(
+> 			"id_case_law"        => "bigint(21) DEFAULT '0' NOT NULL",
+> 			"id_objet"           => "bigint(21) DEFAULT '0' NOT NULL",
+> 			"objet"              => "VARCHAR(25) DEFAULT '' NOT NULL",
+> 			"vu"                 => "VARCHAR(6) DEFAULT 'non' NOT NULL"
+> 		),
+> 		'key' => array(
+> 			"PRIMARY KEY"        => "id_case_law,id_objet,objet",
+> 			"KEY id_case_law"    => "id_case_law"
+> 		)
+> 	);
+>
+> 	return $tables;
+> }
+diff -r -x . -x .. -x fabrique_diff.diff -x fabrique_cl.php ../plugins/fabrique_auto/.backup/cl/cl_administrations.php ../plugins/fabrique_auto/cl/cl_administrations.php
+52c52
+< 	$maj['create'] = array(array('maj_tables', array('spip_case_laws')));
+---
+> 	$maj['create'] = array(array('maj_tables', array('spip_case_laws', 'spip_case_laws_liens')));
+77a78
+> 	sql_drop_table("spip_case_laws_liens");
+diff -r -x . -x .. -x fabrique_diff.diff -x fabrique_cl.php ../plugins/fabrique_auto/.backup/cl/cl_autorisations.php ../plugins/fabrique_auto/cl/cl_autorisations.php
+127a128,140
+> /**
+>  * Autorisation de lier/délier l'élément (caselaws)
+>  *
+>  * @param  string $faire Action demandée
+>  * @param  string $type  Type d'objet sur lequel appliquer l'action
+>  * @param  int    $id    Identifiant de l'objet
+>  * @param  array  $qui   Description de l'auteur demandant l'autorisation
+>  * @param  array  $opt   Options de cette autorisation
+>  * @return bool          true s'il a le droit, false sinon
+> **/
+> function autoriser_associercaselaws_dist($faire, $type, $id, $qui, $opt) {
+> 	return $qui['statut'] == '0minirezo' AND !$qui['restreint'];
+> }
+diff -r -x . -x .. -x fabrique_diff.diff -x fabrique_cl.php ../plugins/fabrique_auto/.backup/cl/cl_pipelines.php ../plugins/fabrique_auto/cl/cl_pipelines.php
+22a23,70
+> /**
+>  * Ajout de contenu sur certaines pages,
+>  * notamment des formulaires de liaisons entre objets
+>  *
+>  * @pipeline affiche_milieu
+>  * @param  array $flux Données du pipeline
+>  * @return array       Données du pipeline
+>  */
+> function cl_affiche_milieu($flux) {
+> 	$texte = "";
+> 	$e = trouver_objet_exec($flux['args']['exec']);
+>
+>
+>
+> 	// case_laws sur les articles
+> 	if (!$e['edition'] AND in_array($e['type'], array('article'))) {
+> 		$texte .= recuperer_fond('prive/objets/editer/liens', array(
+> 			'table_source' => 'case_laws',
+> 			'objet' => $e['type'],
+> 			'id_objet' => $flux['args'][$e['id_table_objet']]
+> 		));
+> 	}
+>
+> 	if ($texte) {
+> 		if ($p=strpos($flux['data'],"<!--affiche_milieu-->"))
+> 			$flux['data'] = substr_replace($flux['data'],$texte,$p,0);
+> 		else
+> 			$flux['data'] .= $texte;
+> 	}
+>
+> 	return $flux;
+> }
+>
+>
+> /**
+>  * Optimiser la base de données en supprimant les liens orphelins
+>  * de l'objet vers quelqu'un et de quelqu'un vers l'objet.
+>  *
+>  * @pipeline optimiser_base_disparus
+>  * @param  array $flux Données du pipeline
+>  * @return array       Données du pipeline
+>  */
+> function cl_optimiser_base_disparus($flux){
+> 	include_spip('action/editer_liens');
+> 	$flux['data'] += objet_optimiser_liens(array('case_law'=>'*'),'*');
+> 	return $flux;
+> }
+>
+diff -r -x . -x .. -x fabrique_diff.diff -x fabrique_cl.php ../plugins/fabrique_auto/.backup/cl/paquet.xml ../plugins/fabrique_auto/cl/paquet.xml
+12c12
+< 		Paquet genere le 2013-05-10 11:20:03
+---
+> 		Paquet genere le 2013-05-10 11:52:18
+47a48,50
+> 	<pipeline nom="declarer_tables_auxiliaires" inclure="base/cl.php" />
+> 	<pipeline nom="affiche_milieu" inclure="cl_pipelines.php" />
+> 	<pipeline nom="optimiser_base_disparus" inclure="cl_pipelines.php" />

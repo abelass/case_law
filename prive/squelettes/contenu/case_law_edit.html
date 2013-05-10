@@ -1,0 +1,30 @@
+[(#ID_OBJET|oui)
+	[(#AUTORISER{modifier,case_law,#ID_CASE_LAW}|sinon_interdire_acces)]
+][(#ID_OBJET|non)
+	[(#AUTORISER{creer,case_law}|sinon_interdire_acces)]
+]
+ 
+#SET{redirect,#ENV{redirect}|sinon{#ID_CASE_LAW|?{#ID_CASE_LAW|generer_url_entite{case_law},#URL_ECRIRE{case_laws}}}}
+
+<div class='cadre-formulaire-editer'>
+<div class="entete-formulaire">
+	[(#ID_CASE_LAW|oui)
+	[(#GET{redirect}|icone_verticale{Back,case_law,'',left retour[(#ENV{retourajax,''}|oui)ajax preload]})]
+	]
+	[
+		[(#ID_CASE_LAW|?{<:case_law:icone_modifier_case_law:>,<:case_law:icone_creer_case_law:>})]
+		<h1>(#ENV{titre,#INFO_SIGNS{case_law,#ID_CASE_LAW}|sinon{<:info_sans_titre:>}})</h1>
+	]
+</div>
+
+#SET{redirect,#ENV{redirect,#ID_CASE_LAW|generer_url_entite{case_law}}}
+[(#ENV{retourajax,''}|oui)
+	#SET{redirect,'javascript:if (window.jQuery) jQuery(".entete-formulaire .retour a").followLink();'}
+	<div class="ajax">
+]
+		[(#FORMULAIRE_EDITER_CASE_LAW{#ENV{id_case_law,oui}, #GET{redirect}, #ENV{associer_objet}})]
+[(#ENV{retourajax,''}|oui)
+	</div>
+	<script type="text/javascript">/*<!\[CDATA\[*/reloadExecPage('#ENV{exec}');/*\]\]>*/</script>
+]
+</div>

@@ -1,0 +1,54 @@
+<paquet
+	prefix="cl"
+	categorie="divers"
+	version="1.0.0"
+	etat="stable"
+	compatibilite="[3.0.8;3.0.*]"
+	logo="prive/themes/spip/images/cl-64.png"
+	documentation=""
+	schema="1.0.3" 
+>
+	<!--
+		Paquet genere le 2013-05-10 11:52:18
+		(Vous pouvez bien entendu supprimer ces commentaires) 
+	-->
+
+	<nom>Case Law</nom>
+
+	<!-- cette balise peut etre presente plusieurs fois s'il y a plusieurs auteurs --> 
+	<auteur lien='http://websimple.be/'>Rainer Müller</auteur>
+
+	<licence>GNU/GPL</licence>
+
+	<!--
+		Exemple de commandes
+		* dependances
+		<necessite nom="saisies" compatibilite="[1.21.0;]" />
+		<utilise nom="saisies" compatibilite="[1.21.0;]" />
+		<lib nom="simplehtmldom" lien="http://chemin_vers_archive.zip" />
+		* pipelines
+		<pipeline nom="autoriser" inclure="cl_autorisations.php" />
+		<pipeline nom="insert_head" inclure="cl_pipelines.php" />
+		* declarer un pipeline 
+		<pipeline nom="mon_pipeline" action="" />
+		* parents de menus de SPIP :
+				menu_accueil (A eviter), menu_edition, menu_publication,
+				menu_activite, menu_squelette, menu_administration, menu_configuration 
+		<menu nom="cl" titre="cl:cl_titre" parent="menu_edition"  icone="images/cl-16.png" />
+		* parents d'onglets... configuration, plugins, statistiques, ... 
+		<onglet nom="cl" titre="cl:cl_titre" parent="configuration" icone="images/cl-24.png" />
+	-->
+
+	<necessite nom="saisies" compatibilite="[1.24.0;]" /> 
+	<necessite nom="verifier" compatibilite="[1.0.2;]" /> 
+	
+	<pipeline nom="autoriser" inclure="cl_autorisations.php" /> 
+
+	<pipeline nom="declarer_tables_objets_sql" inclure="base/cl.php" /> 
+	<pipeline nom="declarer_tables_interfaces" inclure="base/cl.php" /> 
+	<pipeline nom="declarer_tables_auxiliaires" inclure="base/cl.php" /> 
+	<pipeline nom="affiche_milieu" inclure="cl_pipelines.php" /> 
+	<pipeline nom="optimiser_base_disparus" inclure="cl_pipelines.php" /> 
+
+	<menu nom="case_laws" titre="case_law:titre_case_laws" parent="menu_edition" icone="images/case_law-16.png" action="case_laws" /> 
+</paquet>

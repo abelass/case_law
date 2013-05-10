@@ -1,0 +1,46 @@
+[(#AUTORISER{voir,case_law,#ID_CASE_LAW}|sinon_interdire_acces)]
+<BOUCLE_case_law(CASE_LAWS){id_case_law}{si #ENV{exec}|=={case_law}}>
+[(#BOITE_OUVRIR{[
+	[(#AUTORISER{modifier,case_law,#ID_CASE_LAW})
+		[(#ID_CASE_LAW|afficher_qui_edite{case_law}|non)
+			[(#URL_ECRIRE{case_law_edit,id_case_law=#ID_CASE_LAW}|icone_verticale{<:case_law:icone_modifier_case_law:>,case_law,edit,right ajax preload})]
+		]
+		[(#ID_CASE_LAW|afficher_qui_edite{case_law}|oui)
+			[(#URL_ECRIRE{case_law_edit,id_case_law=#ID_CASE_LAW}|icone_verticale{#ID_CASE_LAW|afficher_qui_edite{case_law},warning-24,'',right edition_deja ajax preload})]
+		]
+	]
+
+	<h1>[(#RANG). ](#SIGNS|sinon{<:info_sans_titre:>})[(#CHEMIN_IMAGE{case_law-24.png}|balise_img{case_law,cadre-icone})]</h1>
+
+],simple fiche_objet})]
+
+<div class="ajax">
+	#FORMULAIRE_DATER{case_law,#ID_CASE_LAW}
+</div>
+
+<!--affiche_milieu-->
+
+<div id="wysiwyg">
+<INCLURE{fond=prive/objets/contenu/case_law,id=#ID_CASE_LAW,id_case_law=#ID_CASE_LAW,virtuel=oui,ajax=wysiwyg,wysiwyg=1}>
+</div>
+
+<div class="nettoyeur"></div>
+
+[(#AUTORISER{modifier,case_law,#ID_CASE_LAW})
+	[(#ID_CASE_LAW|afficher_qui_edite{case_law}|non)
+		[(#URL_ECRIRE{case_law_edit,id_case_law=#ID_CASE_LAW}|icone_verticale{<:case_law:icone_modifier_case_law:>,case_law,edit,right ajax preload})]
+	]
+	[(#ID_CASE_LAW|afficher_qui_edite{case_law}|oui)
+		[(#URL_ECRIRE{case_law_edit,id_case_law=#ID_CASE_LAW}|icone_verticale{#ID_CASE_LAW|afficher_qui_edite{case_law},warning-24,'',right edition_deja ajax preload})]
+	]
+]
+
+#PIPELINE{afficher_complement_objet,#ARRAY{args,#ARRAY{type,case_law,id,#ID_CASE_LAW},data,'<div class="nettoyeur"></div>'}}
+
+#BOITE_FERMER
+[(#EVAL{_AJAX}|oui)
+	<script type="text/javascript">/*<!\\[CDATA\\[*/reloadExecPage('#ENV{exec}','#navigation,#chemin');/*\\]\\]>*/</script>
+]
+</BOUCLE_case_law>
+[(#ENV**{exec}|=={case_law_edit}|?{#INCLURE{fond=prive/squelettes/contenu/case_law_edit,redirect='',env,retourajax=oui},#REM|sinon_interdire_acces})]
+<//B_case_law>

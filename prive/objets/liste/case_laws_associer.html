@@ -1,0 +1,71 @@
+[(#SET{defaut_tri,#ARRAY{
+	multi juris,1,
+	id_case_law,1
+}})
+]
+#SET{exclus,#ENV**{exclus,#ENV{objet_source}|lister_objets_lies{#ENV{objet},#ENV{id_objet},#ENV{_objet_lien}}}}
+#SET{debut,#ENV{debutcasa,#EVAL{_request("debutcasa");}}}
+<B_liste_case_laws>
+[(#REM) En cas de pagination indirecte @32, il faut refaire le set car la boucle
+a mis a jour la valeur avec la page reelle]
+#SET{debut,#ENV{debutcasa,#EVAL{_request("debutcasa");}}}
+#SET{afficher_lettres,#TRI|=={'multi juris'}|oui}
+#ANCRE_PAGINATION
+<div class="liste-objets liste-objets-associer case_laws">
+<table class='spip liste'>
+[<caption><span class="caption"><strong>(#ENV*{titre,#GRAND_TOTAL|singulier_ou_pluriel{case_law:info_1_case_law,case_law:info_nb_case_laws}})</strong>
+<span class="recherche">
+	<label for="recherche-#ENV{id}"><:info_rechercher_02:></label>
+	<input type="text" class="recherche" name="recherche" id="recherche-#ENV{id}" value="#ENV{recherche}" />
+	<input type="submit" class="tout_voir" name="tout_voir" value="<:info_tout_afficher:>" />
+</span>
+</span>
+</caption>]
+	<thead>
+		#SET{p,''}
+		<BOUCLE_lettre(CASE_LAWS){tout}{!id_case_law IN #GET{exclus}}{where?}{recherche?}
+			{tri #ENV{par,multi juris},#GET{defaut_tri}}{id_case_law==#GET{afficher_lettres}|?{'.*','A'}}>[
+		(#JURIS**|extraire_multi|initiale|unique|oui)
+		[(#SET{p,#GET{p}|concat{
+		#SELF|parametre_url{debutcasa,@#ID_CASE_LAW}|ancre_url{paginationcasa}|afficher_initiale{#JURIS**|extraire_multi|initiale{},#COMPTEUR_BOUCLE,#GET{debut},#ENV{nb,10}}
+		}})]
+		]#SAUTER{#ENV{nb,10}|moins{#COMPTEUR_BOUCLE|=={1}|?{2,1}}}</BOUCLE_lettre>[
+		(#SET{p,
+			#GET{p}|concat{
+				#REM|afficher_initiale{#REM,#TOTAL_BOUCLE,#GET{debut},#ENV{nb,10}}
+			}
+		})]</B_lettre>
+		[<tr><td colspan="3"><p class='pagination'>(#GET{p})</p></td></tr>]
+	
+		<tr class='first_row'>
+            <th class='juris' scope='col'>[(#TRI{multi juris,<:case_law:label_juris:>,ajax})]</th>
+            <th class='signs' scope='col'>[(#TRI{multi signs,<:case_law:label_signs:>,ajax})]</th>      
+			<th class='action' scope='col'></th>
+		</tr>
+	</thead>
+	<tbody>
+	<BOUCLE_liste_case_laws(CASE_LAWS){!id_case_law IN #GET{exclus}}{where?}{recherche?}
+		{tri #ENV{par,multi juris},#GET{defaut_tri}}{pagination #ENV{nb,10} casa}>
+		<tr class="[(#COMPTEUR_BOUCLE|alterner{row_odd,row_even})][ (#EXPOSE|unique)][ (#JURIS**|extraire_multi|initiale|=={#ENV{i}}|?{on}|unique)]">
+            <td class='juris'>[(#LOGO_CASE_LAW|image_reduire{20,20})]<a href="[(#ID_CASE_LAW|generer_url_entite{case_law})]">#JURIS</td>
+            <td class='signs'>#SIGNS</a></td>
+			<td class='action'>
+				<button class="button link add" name="ajouter_lien\[case_law-#ID_CASE_LAW-#OBJET-#ID_OBJET\]" value="+"><:case_law:ajouter_lien_case_law:> [(#CHEMIN_IMAGE{ajouter-12.png}|balise_img{'+'})]</button>
+			</td>
+		</tr>
+	</BOUCLE_liste_case_laws>
+	</tbody>
+</table>
+[<p class='pagination'>(#PAGINATION{prive})</p>]
+</div>
+</B_liste_case_laws>[(#ENV{recherche}|oui)
+<div class="liste-objets liste-objets-associer case_laws caption-wrap">
+<span class="caption"><strong>[(#VAL{info_recherche_auteur_zero}|_T{#ARRAY{cherche_auteur,#ENV{recherche}}})]</strong>
+<span class="recherche">
+	<label for="recherche-#ENV{id}"><:info_rechercher_02:></label>
+	<input type="text" class="recherche" name="recherche" id="recherche-#ENV{id}" value="#ENV{recherche}" />
+	<input type="submit" class="tout_voir" name="tout_voir" value="<:info_tout_afficher:>" />
+</span>
+</span>
+</div>
+]<//B_liste_case_laws>
