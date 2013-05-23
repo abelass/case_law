@@ -100,7 +100,7 @@ function formulaires_editer_case_law_verifier_dist($id_case_law='new', $retour='
     $verifier = charger_fonction('verifier', 'inc');
     $options=array('normaliser'=>'datetime');
     $erreurs=array();echo 0;
-    if ($erreur = $verifier(_request('decdate'),'date',$options, $normaliser)) {echo 1;
+    if ($erreur = $verifier(_request('decdate'),'date',$options, $normaliser)) {
         $erreurs['decdate'] = $erreur;
     // si une valeur de normalisation a ete transmis, la prendre.
     } elseif (!is_null($normaliser)) {
@@ -108,7 +108,7 @@ function formulaires_editer_case_law_verifier_dist($id_case_law='new', $retour='
         set_request('decdate',$date);
       
     }
-    echo serialize($erreur);
+
     
    $erreurs=array_merge($erreurs,formulaires_editer_objet_verifier('case_law',$id_case_law, array('juris')));
 	return $erreurs;
